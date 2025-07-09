@@ -39,14 +39,15 @@ pipeline {
                       ])
                 }
             }
-            post {
-                 always {
-                      mail to: 'codeble101@gmail.com',
-                      subject: "Completed Pipeline: ${currentBuild.fullDisplayName}",
-                      body: "Your build completed, please check: ${env.BUILD_URL}"
-                 }
-             }
 
 
     }
+
+     post {
+            always {
+                mail to: 'team@company.com',
+                     subject: "Completed Pipeline: ${currentBuild.fullDisplayName}",
+                     body: "Your build completed, please check: ${env.BUILD_URL}"
+            }
+        }
 }
