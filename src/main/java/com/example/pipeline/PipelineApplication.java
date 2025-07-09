@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PipelineApplication {
-	private static final String CONSTANT = "constant";
+	private static final String CONSTANT = "constants";
 	public static void main(String[] args) {
 		SpringApplication.run(PipelineApplication.class, args);
 	}
