@@ -50,4 +50,9 @@ pipeline {
                      body: "Your build completed check : ${env.BUILD_URL}"
             }
         }
+      post {
+             always {
+                 slackSend channel: '#ah', color: 'danger', message: "The pipeline ${currentBuild.fullDisplayName} failed."
+             }
+         }
 }
