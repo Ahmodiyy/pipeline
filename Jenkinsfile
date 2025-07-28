@@ -49,6 +49,11 @@ pipeline {
                         sh "docker push ahmodiyy/pipeline"
                  }
             }
+            stage("Acceptance Test") {
+                 steps {
+                        sh "./gradlew acceptanceTest -Dcalculator.url=http://localhost:8080"
+                 }
+            }
 
     }
 

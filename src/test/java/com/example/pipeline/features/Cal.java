@@ -1,14 +1,15 @@
-package com.example.pipeline;
+package com.example.pipeline.features;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StepDefinition {
-    private String server = System.getProperty("calculator.url");
+public class Cal {
+  //  private String server = System.getProperty("calculator.url");
+  private String server = "http://localhost:7070";
     private RestTemplate restTemplate = new RestTemplate();
     private String a;
     private String b;
