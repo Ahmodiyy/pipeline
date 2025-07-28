@@ -39,7 +39,16 @@ pipeline {
                       ])
                 }
             }
-
+            stage("Docker Build") {
+                 steps {
+                       sh "docker build -t ahmodiyy/pipeline ."
+                 }
+            }
+            stage("Docker Push") {
+                 steps {
+                        sh "docker push ahmodiyy/pipeline"
+                 }
+            }
 
     }
 
