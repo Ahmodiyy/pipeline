@@ -49,9 +49,15 @@ pipeline {
                         sh "docker push ahmodiyy/pipeline"
                  }
             }
+             stage("Deploy to staging") {
+                 steps {
+                      sh "docker run -d --rm -p 7070:7070 --name pipeline ahmodiyy/pipeline"
+                 }
+             }
             stage("Acceptance Test") {
                  steps {
-                        sh "./gradlew acceptanceTest -Dcalculator.url=http://localhost:8080"
+                        sleep 60
+                        sh "./gradlew test --tests "acceptance.AcceptanceTest" -Durl=http://localhost:7070"
                  }
             }
 
@@ -64,6 +70,7 @@ pipeline {
                      body: "Your build completed check : ${env.BUILD_URL}"
 
                  slackSend channel: '#ahm', color: 'danger', message: "The pipeline ${currentBuild.fullDisplayName} failed."
+                 sh "docker stop pipeline"
             }
         }
 
