@@ -40,5 +40,8 @@ dependencies {
 }
 
 test {
+	useJUnitPlatform()
+	exclude '**/acceptance/**'
 	systemProperty "url", System.getProperty("url")
 }
+
