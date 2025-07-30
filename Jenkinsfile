@@ -57,7 +57,7 @@ pipeline {
             stage("Acceptance Test") {
                  steps {
                         sleep 60
-                        sh "./gradlew test --tests "acceptance.AcceptanceTest" -Durl=http://localhost:7070"
+                        sh "./gradlew test --tests acceptance.AcceptanceTest -Durl=http://localhost:7070"
                  }
             }
 
