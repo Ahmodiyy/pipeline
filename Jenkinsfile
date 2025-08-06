@@ -40,6 +40,11 @@ pipeline {
                       ])
                 }
             }
+            stage("Generate bootJar") {
+                 steps {
+                      sh "./gradlew bootJar"
+                 }
+            }
             stage("Docker Build") {
                  steps {
                        sh "docker build -t ahmodiyy/pipeline ."
