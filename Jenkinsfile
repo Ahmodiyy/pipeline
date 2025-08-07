@@ -50,6 +50,14 @@ pipeline {
                        sh "docker build -t ahmodiyy/pipeline ."
                  }
             }
+            stage("Docker login") {
+                  steps {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub',
+                                      usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                      sh "docker login --username $USERNAME --password $PASSWORD"
+                    }
+                  }
+                }
             stage("Docker Push") {
                  steps {
                         sh "docker push ahmodiyy/pipeline"
@@ -63,7 +71,7 @@ pipeline {
             stage("Acceptance Test") {
                  steps {
                         sleep 60
-                        sh "./gradlew test --tests acceptance.AcceptanceTest -Durl=http://localhost:7070"
+                        sh "./gradlew acceptanceTest -Durl=http://localhost:7070"
                  }
             }
 
