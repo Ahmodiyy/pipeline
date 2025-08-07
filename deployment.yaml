@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: calculator
-          image: leszko/calculator
+          image: ahmodiyy/pipeline
           ports:
-            - containerPort: 8080
+            - containerPort: 7070
