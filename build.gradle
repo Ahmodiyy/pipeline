@@ -39,9 +39,13 @@ dependencies {
 	testImplementation 'io.cucumber:cucumber-junit:7.20.0'
 }
 
+tasks.register('acceptanceTest', Test) {
+	include '**/acceptance/**'
+	systemProperties System.getProperties()
+}
+
 test {
 	useJUnitPlatform()
 	exclude '**/acceptance/**'
-	systemProperty "url", System.getProperty("url")
 }
 
