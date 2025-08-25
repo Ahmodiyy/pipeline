@@ -8,6 +8,8 @@ pipeline {
         }
         stage("Compile") {
             steps {
+                sh "java -version"
+                sh "./gradlew --version"
                 sh 'docker version'
                 sh 'chmod +x gradlew'
                 sh "./gradlew compileJava"
