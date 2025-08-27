@@ -12,6 +12,7 @@ pipeline {
                 sh "docker version"
                 sh "chmod +x gradlew"
                 sh "./gradlew --version"
+                sh  "./gradlew clean"
                 sh "./gradlew compileJava"
             }
         }
