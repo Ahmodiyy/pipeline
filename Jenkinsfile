@@ -9,8 +9,9 @@ pipeline {
         stage("Compile") {
             steps {
                 sh "java -version"
-                sh 'docker version'
-                sh 'chmod +x gradlew'
+                sh "docker version"
+                sh "kubectl version"
+                sh "chmod +x gradlew"
                 sh "./gradlew --version"
                 sh "./gradlew compileJava"
             }
