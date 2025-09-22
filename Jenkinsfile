@@ -69,7 +69,7 @@ pipeline {
                      subject: "Completed Pipeline: ${currentBuild.fullDisplayName}",
                      body: "Your build completed check : ${env.BUILD_URL}"
 
-                 slackSend channel: '#ahm', color: 'danger', message: "The pipeline ${currentBuild.fullDisplayName} failed."
+                 slackSend channel: '#test', color: 'danger', message: "The pipeline ${currentBuild.fullDisplayName} failed."
                  sh "docker stop pipeline"
             }
         }
