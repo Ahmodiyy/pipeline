@@ -6,30 +6,36 @@ pipeline {
                 git url : "https://github.com/Ahmodiyy/pipeline.git", branch: "main"
             }
         }
-        stage("Build") {
+        stage("Compile") {
             steps {
-                bat "java -version"
-                bat "./gradlew --version"
-                bat "docker version"
-                bat "wsl -d Ubuntu ansible --version"
-                bat "./gradlew clean"
-                bat "./gradlew build"
+                sh "java -version"
+                sh "docker version"
+                sh "chmod +x gradlew"
+                sh "./gradlew --version"
+                sh  "./gradlew clean"
+                sh "./gradlew compileJava"
             }
         }
+         stage("Unit test") {
+               steps {
+                    sh "./gradlew test"
+               }
+          }
+
           stage("Code coverage") {
                steps {
-                    bat "./gradlew jacocoTestReport"
+                    sh "./gradlew jacocoTestReport"
                     publishHTML (target: [
                                    reportDir: 'build/reports/jacoco/test/html',
                                    reportFiles: 'index.html',
                                    reportName: "JaCoCo Report"
                               ])
-                    bat "./gradlew jacocoTestCoverageVerification"
+                    sh "./gradlew jacocoTestCoverageVerification"
                }
            }
            stage("Static code analysis") {
                 steps {
-                     bat "./gradlew checkstyleMain"
+                     sh "./gradlew checkstyleMain"
                      publishHTML (target: [
                           reportDir: 'build/reports/checkstyle/',
                           reportFiles: 'main.html',
@@ -37,25 +43,38 @@ pipeline {
                       ])
                 }
             }
-            stage("Docker Build") {
+            stage("Generate bootJar") {
                  steps {
-                       bat "docker build -t ahmodiyy/pipeline ."
+                      sh "./gradlew bootJar"
                  }
             }
+            stage("Docker Build") {
+                 steps {
+                       sh "docker build -t ahmodiyy/pipeline ."
+                 }
+            }
+            stage("Docker login") {
+                  steps {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'dockerhub',
+                                      usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                      sh "docker login --username $USERNAME --password $PASSWORD"
+                    }
+                  }
+                }
             stage("Docker Push") {
                  steps {
-                        bat "docker push ahmodiyy/pipeline"
+                        sh "docker push ahmodiyy/pipeline"
                  }
             }
              stage("Deploy to staging") {
                  steps {
-                      bat "docker run -d --rm -p 7070:7070 --name pipeline ahmodiyy/pipeline"
+                      sh "docker run -d --rm -p 7070:7070 --name pipeline ahmodiyy/pipeline"
                  }
              }
             stage("Acceptance Test") {
                  steps {
                         sleep 60
-                        bat "./gradlew acceptanceTest -Durl=http://localhost:7070"
+                        sh "./gradlew acceptanceTest -Durl=http://localhost:7070"
                  }
             }
 
@@ -68,6 +87,7 @@ pipeline {
                      body: "Your build completed check : ${env.BUILD_URL}"
 
                  slackSend channel: '#ahm', color: 'danger', message: "The pipeline ${currentBuild.fullDisplayName} failed."
+                 sh "docker stop pipeline"
             }
         }
 
